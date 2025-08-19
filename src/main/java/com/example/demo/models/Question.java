@@ -35,3 +35,5 @@ public class Question {
     private LocalDateTime updatedAt;
 
 }
+
+// Question has many tags, one tag has many questions
