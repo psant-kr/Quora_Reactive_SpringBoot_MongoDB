@@ -39,12 +39,13 @@ public class QuestionController {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    @GetMapping("/search")
     public Flux<QuestionResponseDTO> searchQuestions(
             @RequestParam String query,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return questionService.searchQuestions(query, page, size);
     }
 
     @GetMapping("/tag/{tag}")
