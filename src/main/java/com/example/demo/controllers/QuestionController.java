@@ -26,7 +26,9 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public Mono<QuestionResponseDTO> getQuestionById(@PathVariable String id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return questionService.getQuestionById(id)
+                .doOnSuccess(response -> System.out.println("Question fetched successfully " + response))
+                .doOnError(error -> System.out.println("Error fetching question " + error));
     }
 
     @GetMapping()

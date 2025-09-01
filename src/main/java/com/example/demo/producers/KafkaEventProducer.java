@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaEventProducer {
 
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void publishViewCountEvent(ViewCountEvent viewCountEvent) {
 
