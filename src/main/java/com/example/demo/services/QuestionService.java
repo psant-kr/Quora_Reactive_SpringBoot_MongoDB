@@ -24,6 +24,8 @@ public class QuestionService implements IQuestionService {
     private final QuestionRepository questionRepository;
     private final KafkaEventProducer kafkaEventProducer;
 
+    private final IQuestionIndexService questionIndexService;
+
     @Override
     public Mono<QuestionResponseDTO> createQuestions(QuestionRequestDTO questionRequestDTO) {
 
@@ -35,7 +37,10 @@ public class QuestionService implements IQuestionService {
                 .build();
 
         return questionRepository.save(question)
-                .map(QuestionAdapter::toQuestionResponseDTO)
+                .map(savedQuestion ->{
+                    questionIndexService.createQuestionIndex(savedQuestion); // dumping the question to elastic search
+                    return QuestionAdapter.toQuestionResponseDTO(savedQuestion);
+                })
                 .doOnSuccess(response -> System.out.println("Question created successfully: " + response))
                 .doOnError(error -> System.out.println("Error creating Question: " + error));
 
