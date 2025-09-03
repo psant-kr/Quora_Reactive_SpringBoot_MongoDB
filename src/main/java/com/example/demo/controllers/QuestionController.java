@@ -2,11 +2,14 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.QuestionRequestDTO;
 import com.example.demo.dto.QuestionResponseDTO;
+import com.example.demo.models.QuestionElasticDocument;
 import com.example.demo.services.IQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -62,5 +65,10 @@ public class QuestionController {
             @RequestParam(defaultValue = "10") int size
     ) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @GetMapping("/elasticsearch")
+    public List<QuestionElasticDocument> searchQuestionByElasticSearch(@RequestParam String query) {
+        return questionService.searchQuestionByElasticSearch(query);
     }
 }

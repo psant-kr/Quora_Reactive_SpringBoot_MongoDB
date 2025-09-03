@@ -5,7 +5,9 @@ import com.example.demo.dto.QuestionRequestDTO;
 import com.example.demo.dto.QuestionResponseDTO;
 import com.example.demo.events.ViewCountEvent;
 import com.example.demo.models.Question;
+import com.example.demo.models.QuestionElasticDocument;
 import com.example.demo.producers.KafkaEventProducer;
+import com.example.demo.repositories.QuestionDocumentRepository;
 import com.example.demo.repositories.QuestionRepository;
 import com.example.demo.utils.CursorUtils;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class QuestionService implements IQuestionService {
     private final KafkaEventProducer kafkaEventProducer;
 
     private final IQuestionIndexService questionIndexService;
+    private final QuestionDocumentRepository questionDocumentRepository;
 
     @Override
     public Mono<QuestionResponseDTO> createQuestions(QuestionRequestDTO questionRequestDTO) {
@@ -85,5 +89,10 @@ public class QuestionService implements IQuestionService {
                     kafkaEventProducer.publishViewCountEvent(viewCountEvent);
                 });
 
+    }
+
+    @Override
+    public List<QuestionElasticDocument> searchQuestionByElasticSearch(String query) {
+        return questionDocumentRepository.findByTitleContainingOrContentContaining(query, query);
     }
 }
